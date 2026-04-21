@@ -8,7 +8,7 @@ namespace IntelligenceQueryEngine
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -67,8 +67,8 @@ namespace IntelligenceQueryEngine
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-                dbContext.Database.EnsureCreatedAsync();
-                 SeedData.InitializeAsync(dbContext, env);
+                await dbContext.Database.EnsureCreatedAsync();
+                await SeedData.InitializeAsync(dbContext, env);
             }
 
             app.Run();
