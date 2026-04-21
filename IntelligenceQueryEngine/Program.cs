@@ -20,10 +20,8 @@ namespace IntelligenceQueryEngine
             builder.Services.AddSwaggerGen();
 
             // Configure for PXXL (port 8080) - MUST be before building app
-            builder.WebHost.ConfigureKestrel(options =>
-            {
-                options.ListenAnyIP(8080);
-            });
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+            builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -56,10 +54,10 @@ namespace IntelligenceQueryEngine
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+
             app.UseAuthorization();
 
-
+            app.MapGet("/", () => "Running");
             app.MapControllers();
 
             // Seed database
