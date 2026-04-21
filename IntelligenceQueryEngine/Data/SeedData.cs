@@ -76,14 +76,14 @@ public static class SeedData
             profiles.Add(new Profile
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = item.GetProperty("Name").GetString() ?? string.Empty,
-                Gender = item.GetProperty("Gender").GetString() ?? string.Empty,
-                GenderProbability = item.GetProperty("GenderProbability").GetDouble(),
-                Age = item.GetProperty("Age").GetInt32(),
-                AgeGroup = item.GetProperty("AgeGroup").GetString() ?? string.Empty,
-                CountryId = item.GetProperty("CountryId").GetString() ?? string.Empty,
-                CountryName = item.GetProperty("CountryName").GetString() ?? string.Empty,
-                CountryProbability = item.GetProperty("CountryProbability").GetDouble(),
+                Name = item.GetProperty("name").GetString() ?? string.Empty,           // lowercase "name"
+                Gender = item.GetProperty("gender").GetString() ?? string.Empty,       // lowercase "gender"
+                GenderProbability = item.GetProperty("gender_probability").GetDouble(), // snake_case
+                Age = item.GetProperty("age").GetInt32(),                              // lowercase "age"
+                AgeGroup = item.GetProperty("age_group").GetString() ?? string.Empty,  // snake_case
+                CountryId = item.GetProperty("country_id").GetString() ?? string.Empty, // snake_case
+                CountryName = item.GetProperty("country_name").GetString() ?? string.Empty, // snake_case
+                CountryProbability = item.GetProperty("country_probability").GetDouble(), // snake_case
                 CreatedAt = DateTime.UtcNow
             });
         }
