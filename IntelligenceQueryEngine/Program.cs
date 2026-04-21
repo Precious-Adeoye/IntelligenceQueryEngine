@@ -63,11 +63,12 @@ namespace IntelligenceQueryEngine
             app.MapControllers();
 
             // Seed database
-            using (var scope = app.Services.CreateScope())
+             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-                SeedData.InitializeAsync(dbContext, env);
+                dbContext.Database.EnsureCreatedAsync();
+                 SeedData.InitializeAsync(dbContext, env);
             }
 
             app.Run();

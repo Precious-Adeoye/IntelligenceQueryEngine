@@ -1,15 +1,38 @@
-﻿namespace IntelligenceQueryEngine.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class Profile
+namespace IntelligenceQueryEngine.Models
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString(); // UUID v7 compatible
-    public string Name { get; set; } = string.Empty;
-    public string Gender { get; set; } = string.Empty;
-    public double GenderProbability { get; set; }
-    public int Age { get; set; }
-    public string AgeGroup { get; set; } = string.Empty;
-    public string CountryId { get; set; } = string.Empty;
-    public string CountryName { get; set; } = string.Empty;
-    public double CountryProbability { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public class Profile
+    {
+        [Column("Id")]
+        public string Id { get; set; } = string.Empty;
+
+        [Column("Name")]
+        public string Name { get; set; } = string.Empty;
+
+        [Column("Gender")]
+        public string Gender { get; set; } = string.Empty;
+
+        [Column("GenderProbability")]
+        public double GenderProbability { get; set; }
+
+        [Column("age")]
+        public int Age { get; set; }
+
+        [Column("AgeGroup")]
+        public string AgeGroup { get; set; } = string.Empty;
+
+        [Column("CountryId")]
+        public string CountryId { get; set; } = string.Empty;
+
+        [Column("CountryName")]
+        public string CountryName { get; set; } = string.Empty;
+
+        [Column("CountryProbability")]
+        public double CountryProbability { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+    }
 }
