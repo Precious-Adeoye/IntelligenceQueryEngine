@@ -17,6 +17,7 @@ namespace IntelligenceQueryEngine
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddSwaggerGen();
 
             // Configure for PXXL (port 8080) - MUST be before building app
             builder.WebHost.ConfigureKestrel(options =>
