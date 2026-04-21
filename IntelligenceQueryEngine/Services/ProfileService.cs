@@ -6,26 +6,35 @@ namespace IntelligenceQueryEngine.Services;
 public class ProfileService
 {
     private readonly string _connectionString;
-    public ProfileService(IConfiguration config) => _connectionString = config.GetConnectionString("DefaultConnection") ?? "Data Source=profiles.db";
+
+    public ProfileService(IConfiguration config)
+    {
+        _connectionString = config.GetConnectionString("DefaultConnection") ?? "Data Source=profiles.db";
+    }
 
     public async Task<(List<Profile> profiles, int total)> GetAsync(QueryParams q)
     {
-        var (sql, parameters) = QueryBuilder.Build(q);
+        // FIXED: Now expecting 3 items (sql, parameters, countSql)
+        var (sql, parameters, countSql) = QueryBuilder.Build(q);
+
         var profiles = new List<Profile>();
         int total = 0;
 
         using var conn = new SqliteConnection(_connectionString);
         await conn.OpenAsync();
 
-        // Count
-        var countSql = sql.Replace("SELECT *", "SELECT COUNT(*)").Split("ORDER BY")[0];
+        // Get total count using the separate countSql
         using var countCmd = new SqliteCommand(countSql, conn);
-        foreach (var p in parameters) countCmd.Parameters.AddWithValue(p.Key, p.Value);
+        foreach (var p in parameters)
+            countCmd.Parameters.AddWithValue(p.Key, p.Value);
+
         total = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
 
-        // Data
+        // Get paginated data
         using var cmd = new SqliteCommand(sql, conn);
-        foreach (var p in parameters) cmd.Parameters.AddWithValue(p.Key, p.Value);
+        foreach (var p in parameters)
+            cmd.Parameters.AddWithValue(p.Key, p.Value);
+
         using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
@@ -43,6 +52,7 @@ public class ProfileService
                 CreatedAt = reader.GetDateTime(9)
             });
         }
+
         return (profiles, total);
     }
 }
