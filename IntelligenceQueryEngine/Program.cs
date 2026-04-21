@@ -23,6 +23,8 @@ namespace IntelligenceQueryEngine
             var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
             builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
+            Directory.CreateDirectory("/tmp");
+
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
