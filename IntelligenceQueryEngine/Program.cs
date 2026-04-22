@@ -12,7 +12,11 @@ namespace IntelligenceQueryEngine
             var builder = WebApplication.CreateBuilder(args);
 
             // Controllers
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
 
             // Swagger / OpenAPI
             builder.Services.AddOpenApi();
