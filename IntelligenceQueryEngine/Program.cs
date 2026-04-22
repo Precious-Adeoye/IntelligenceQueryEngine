@@ -1,4 +1,3 @@
-
 using IntelligenceQueryEngine.Data;
 using IntelligenceQueryEngine.Middleware;
 using IntelligenceQueryEngine.Services;
@@ -8,33 +7,38 @@ namespace IntelligenceQueryEngine
 {
     public class Program
     {
-        public async static Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
+            // Controllers
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+            // Swagger / OpenAPI
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
+
+            // HttpClient
             builder.Services.AddHttpClient();
 
-            // Configure for PXXL (port 8080) - MUST be before building app
+            // Bind to hosting port
             var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
             builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
+            // Writable temp folder
             Directory.CreateDirectory("/tmp");
 
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite("Data Source=/tmp/app.db"));
 
+            // Health checks
             builder.Services.AddHealthChecks();
 
-            // Services
+            // App services
             builder.Services.AddScoped<ProfileService>();
 
+            // CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>
@@ -47,31 +51,28 @@ namespace IntelligenceQueryEngine
 
             var app = builder.Build();
 
-            // CORS
+            // Middleware
             app.UseCors("AllowAll");
-            // Error handling
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
+            // Enable Swagger in all environments (temporary for debugging)
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseAuthorization();
 
+            // Health route
             app.MapGet("/", () => "Running");
+
+            app.MapHealthChecks("/health");
+
             app.MapControllers();
 
-            // Seed database
-             using (var scope = app.Services.CreateScope())
+            // Create database only (non-blocking seed removed for deployment stability)
+            using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-                await dbContext.Database.EnsureCreatedAsync();
-                await SeedData.InitializeAsync(dbContext, env);
+                dbContext.Database.EnsureCreated();
             }
 
             try
@@ -80,7 +81,7 @@ namespace IntelligenceQueryEngine
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ Application failed to start: " + ex);
+                Console.WriteLine("Application failed to start: " + ex);
                 throw;
             }
         }
