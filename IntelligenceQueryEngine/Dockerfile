@@ -27,4 +27,9 @@ RUN dotnet publish "./IntelligenceQueryEngine.csproj" -c $BUILD_CONFIGURATION -o
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Environment variables
+ENV ConnectionStrings__DefaultConnection="Data Source=/app/app.db"
+ENV ASPNETCORE_ENVIRONMENT="Production"
+
 ENTRYPOINT ["dotnet", "IntelligenceQueryEngine.dll"]

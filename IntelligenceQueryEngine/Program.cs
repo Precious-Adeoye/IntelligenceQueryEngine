@@ -18,6 +18,7 @@ namespace IntelligenceQueryEngine
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddHttpClient();
 
             // Configure for PXXL (port 8080) - MUST be before building app
             var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
@@ -28,6 +29,8 @@ namespace IntelligenceQueryEngine
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddHealthChecks();
 
             // Services
             builder.Services.AddScoped<ProfileService>();
@@ -71,7 +74,15 @@ namespace IntelligenceQueryEngine
                 await SeedData.InitializeAsync(dbContext, env);
             }
 
-            app.Run();
+            try
+            {
+                app.Run();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Application failed to start: " + ex);
+                throw;
+            }
         }
     }
 }
