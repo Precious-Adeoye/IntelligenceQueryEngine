@@ -6,34 +6,34 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IntelligenceQueryEngine.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class changetablename : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Profiles",
+                name: "profiles",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Gender = table.Column<string>(type: "TEXT", nullable: false),
-                    GenderProbability = table.Column<double>(type: "REAL", nullable: false),
-                    Age = table.Column<int>(type: "INTEGER", nullable: false),
-                    AgeGroup = table.Column<string>(type: "TEXT", nullable: false),
-                    CountryId = table.Column<string>(type: "TEXT", nullable: false),
+                    gender_probability = table.Column<double>(type: "REAL", nullable: false),
+                    age = table.Column<int>(type: "INTEGER", nullable: false),
+                    age_group = table.Column<string>(type: "TEXT", nullable: false),
+                    country_id = table.Column<string>(type: "TEXT", nullable: false),
                     CountryName = table.Column<string>(type: "TEXT", nullable: false),
-                    CountryProbability = table.Column<double>(type: "REAL", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    country_probability = table.Column<double>(type: "REAL", nullable: false),
+                    created_at = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Profiles", x => x.Id);
+                    table.PrimaryKey("PK_profiles", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Profiles_Name",
-                table: "Profiles",
+                name: "IX_profiles_Name",
+                table: "profiles",
                 column: "Name",
                 unique: true);
         }
@@ -42,7 +42,7 @@ namespace IntelligenceQueryEngine.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Profiles");
+                name: "profiles");
         }
     }
 }

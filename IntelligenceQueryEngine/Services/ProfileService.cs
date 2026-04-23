@@ -43,12 +43,12 @@ public class ProfileService
                 Id = reader.GetString(0),
                 Name = reader.GetString(1),
                 Gender = reader.GetString(2),
-                GenderProbability = reader.GetDouble(3),
+                gender_probability = reader.GetDouble(3),
                 Age = reader.GetInt32(4),
-                AgeGroup = reader.GetString(5),
-                CountryId = reader.GetString(6),
+                age_group = reader.GetString(5),
+                country_id = reader.GetString(6),
                 CountryName = reader.GetString(7),
-                CountryProbability = reader.GetDouble(8),
+                country_probability = reader.GetDouble(8),
                 CreatedAt = reader.GetDateTime(9)
             });
         }

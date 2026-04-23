@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelligenceQueryEngine.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260421111112_Add-Dataannotation")]
-    partial class AddDataannotation
+    [Migration("20260423112333_change-table-name")]
+    partial class changetablename
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,30 +24,16 @@ namespace IntelligenceQueryEngine.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<int>("Age")
                         .HasColumnType("INTEGER")
                         .HasColumnName("age");
 
-                    b.Property<string>("AgeGroup")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("age_group");
-
-                    b.Property<string>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("country_id");
-
                     b.Property<string>("CountryName")
                         .IsRequired()
                         .HasColumnType("TEXT")
-                        .HasColumnName("country_name");
-
-                    b.Property<double>("CountryProbability")
-                        .HasColumnType("REAL")
-                        .HasColumnName("country_probability");
+                        .HasColumnName("CountryName");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT")
@@ -56,23 +42,37 @@ namespace IntelligenceQueryEngine.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("TEXT")
-                        .HasColumnName("gender");
-
-                    b.Property<double>("GenderProbability")
-                        .HasColumnType("REAL")
-                        .HasColumnName("gender_probability");
+                        .HasColumnName("Gender");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT")
-                        .HasColumnName("name");
+                        .HasColumnName("Name");
+
+                    b.Property<string>("age_group")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("age_group");
+
+                    b.Property<string>("country_id")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("country_id");
+
+                    b.Property<double>("country_probability")
+                        .HasColumnType("REAL")
+                        .HasColumnName("country_probability");
+
+                    b.Property<double>("gender_probability")
+                        .HasColumnType("REAL")
+                        .HasColumnName("gender_probability");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Profiles");
+                    b.ToTable("profiles");
                 });
 #pragma warning restore 612, 618
         }
