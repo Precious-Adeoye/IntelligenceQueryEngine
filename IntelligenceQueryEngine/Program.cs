@@ -19,7 +19,7 @@ namespace IntelligenceQueryEngine
             });
 
             // Swagger / OpenAPI
-            builder.Services.AddOpenApi();
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             // HttpClient
