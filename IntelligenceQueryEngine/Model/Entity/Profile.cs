@@ -14,22 +14,22 @@ namespace IntelligenceQueryEngine.Models
         [Column("Gender")]
         public string Gender { get; set; } = string.Empty;
 
-        [Column("GenderProbability")]
+        [Column("gender_probability")]
         public double GenderProbability { get; set; }
 
         [Column("age")]
         public int Age { get; set; }
 
-        [Column("AgeGroup")]
+        [Column("age_group")]
         public string AgeGroup { get; set; } = string.Empty;
 
-        [Column("CountryId")]
+        [Column("country_id")]
         public string CountryId { get; set; } = string.Empty;
 
         [Column("CountryName")]
         public string CountryName { get; set; } = string.Empty;
 
-        [Column("CountryProbability")]
+        [Column("country_probability")]
         public double CountryProbability { get; set; }
 
         [Column("created_at")]

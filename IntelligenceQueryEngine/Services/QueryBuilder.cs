@@ -78,7 +78,18 @@ public static class QueryBuilder
             SELECT COUNT(*) FROM Profiles
             {whereClause}";
 
+        // Map sort_by values to actual column names
+        var sortColumn = q.SortBy?.ToLower() switch
+        {
+            "age" => "Age",
+            "gender_probability" => "GenderProbability",
+            "created_at" => "CreatedAt",
+            _ => "CreatedAt"
+        };
+
         // Return 3 items: sql, parameters, countSql
         return (sql, parameters, countSql);
+
+        
     }
 }
