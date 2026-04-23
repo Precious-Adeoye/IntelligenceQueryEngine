@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelligenceQueryEngine.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260423112333_change-table-name")]
-    partial class changetablename
+    [Migration("20260423135016_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
