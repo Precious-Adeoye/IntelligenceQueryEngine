@@ -37,7 +37,7 @@ namespace IntelligenceQueryEngine
                 options.UseSqlite("Data Source=/tmp/app.db"));
 
             // Health checks
-            builder.Services.AddHealthChecks();
+           // builder.Services.AddHealthChecks();
 
             // App services
             builder.Services.AddScoped<ProfileService>();
@@ -57,7 +57,7 @@ namespace IntelligenceQueryEngine
 
             // Middleware
             app.UseCors("AllowAll");
-            app.UseMiddleware<ErrorHandlingMiddleware>();
+           // app.UseMiddleware<ErrorHandlingMiddleware>();
 
             // Enable Swagger in all environments (temporary for debugging)
             app.UseSwagger();
@@ -68,7 +68,7 @@ namespace IntelligenceQueryEngine
             // Health route
             app.MapGet("/", () => "Running");
 
-            app.MapHealthChecks("/health");
+            //app.MapHealthChecks("/health");
 
             app.MapControllers();
 
@@ -76,11 +76,19 @@ namespace IntelligenceQueryEngine
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                dbContext.Database.EnsureCreated();
+                try
+                {
+                    dbContext.Database.EnsureCreated();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
             }
 
             try
             {
+                Console.WriteLine("APP STARTING...");
                 app.Run();
             }
             catch (Exception ex)
