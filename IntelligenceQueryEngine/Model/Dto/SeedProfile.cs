@@ -1,15 +1,15 @@
 ﻿namespace IntelligenceQueryEngine.Model.Dto
 {
-    public class ProfilesWrapper { public List<SeedProfile> Profiles { get; set; } = new(); }
+    public class ProfilesWrapper { public List<SeedProfile> profiles { get; set; } = new(); }
     public class SeedProfile
     {
-        public string Name { get; set; } = string.Empty;
-        public string Gender { get; set; } = string.Empty;
-        public double GenderProbability { get; set; }
-        public int Age { get; set; }
-        public string AgeGroup { get; set; } = string.Empty;
-        public string CountryId { get; set; } = string.Empty;
-        public string CountryName { get; set; } = string.Empty;
-        public double CountryProbability { get; set; }
+        public string name { get; set; } = string.Empty;
+        public string gender { get; set; } = string.Empty;
+        public double gender_probability { get; set; }
+        public int age { get; set; }
+        public string age_group { get; set; } = string.Empty;
+        public string country_id { get; set; } = string.Empty;
+        public string country_name { get; set; } = string.Empty;
+        public double country_probability { get; set; }
     }
 }

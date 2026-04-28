@@ -30,17 +30,17 @@ public class ProfilesController : ControllerBase
     {
         var query = new QueryParams
         {
-            Gender = gender,
-            AgeGroup = age_group,
-            CountryId = country_id,
-            MinAge = min_age,
-            MaxAge = max_age,
-            MinGenderProbability = min_gender_probability,
-            MinCountryProbability = min_country_probability,
-            SortBy = sort_by,
-            Order = order,
-            Page = page,
-            Limit = Math.Min(limit, 50)
+            gender = gender,
+            age_group = age_group,
+            country_id = country_id,
+            min_age = min_age,
+            max_age = max_age,
+            min_gender_probability = min_gender_probability,
+            min_country_probability = min_country_probability,
+            sort_by = sort_by,
+            order = order,
+            page = page,
+            limit = Math.Min(limit, 50)
         };
 
         var (profiles, total) = await _service.GetAsync(query);
@@ -62,10 +62,10 @@ public class ProfilesController : ControllerBase
         if (!_parser.CanInterpret(query))
             return UnprocessableEntity(new ErrorResponse { Message = "Unable to interpret query" });
 
-        query.SortBy = sort_by;
-        query.Order = order;
-        query.Page = page;
-        query.Limit = Math.Min(limit, 50);
+        query.sort_by = sort_by;
+        query.order = order;
+        query.page = page;
+        query.limit = Math.Min(limit, 50);
 
         var (profiles, total) = await _service.GetAsync(query);
         return Ok(new ApiResponse<List<Profile>> { Status = "success", Page = page, Limit = limit, Total = total, Data = profiles });
