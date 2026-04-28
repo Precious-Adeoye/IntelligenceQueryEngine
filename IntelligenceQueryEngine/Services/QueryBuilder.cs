@@ -9,87 +9,84 @@ public static class QueryBuilder
         var conditions = new List<string>();
         var parameters = new Dictionary<string, object>();
 
-        if (!string.IsNullOrEmpty(q.Gender))
+        // Gender filter
+        if (!string.IsNullOrEmpty(q.gender))
         {
-            conditions.Add("Gender = @Gender");
-            parameters["@Gender"] = q.Gender;
+            conditions.Add("gender = @gender");
+            parameters["@gender"] = q.gender;
         }
 
-        if (!string.IsNullOrEmpty(q.AgeGroup))
+        // Age group filter
+        if (!string.IsNullOrEmpty(q.age_group))
         {
-            conditions.Add("AgeGroup = @AgeGroup");
-            parameters["@AgeGroup"] = q.AgeGroup;
+            conditions.Add("age_group = @age_group");
+            parameters["@age_group"] = q.age_group;
         }
 
-        if (!string.IsNullOrEmpty(q.CountryId))
+        // Country filter
+        if (!string.IsNullOrEmpty(q.country_id))
         {
-            conditions.Add("CountryId = @CountryId");
-            parameters["@CountryId"] = q.CountryId;
+            conditions.Add("country_id = @country_id");
+            parameters["@country_id"] = q.country_id;
         }
 
-        if (q.MinAge.HasValue)
+        // Min age
+        if (q.min_age.HasValue)
         {
-            conditions.Add("Age >= @MinAge");
-            parameters["@MinAge"] = q.MinAge.Value;
+            conditions.Add("age >= @min_age");
+            parameters["@min_age"] = q.min_age.Value;
         }
 
-        if (q.MaxAge.HasValue)
+        // Max age
+        if (q.max_age.HasValue)
         {
-            conditions.Add("Age <= @MaxAge");
-            parameters["@MaxAge"] = q.MaxAge.Value;
+            conditions.Add("age <= @max_age");
+            parameters["@max_age"] = q.max_age.Value;
         }
 
-        if (q.MinGenderProbability.HasValue)
+        // Min gender probability
+        if (q.min_gender_probability.HasValue)
         {
-            conditions.Add("GenderProbability >= @MinGP");
-            parameters["@MinGP"] = q.MinGenderProbability.Value;
+            conditions.Add("gender_probability >= @min_gender_probability");
+            parameters["@min_gender_probability"] = q.min_gender_probability.Value;
         }
 
-        if (q.MinCountryProbability.HasValue)
+        // Min country probability
+        if (q.min_country_probability.HasValue)
         {
-            conditions.Add("CountryProbability >= @MinCP");
-            parameters["@MinCP"] = q.MinCountryProbability.Value;
+            conditions.Add("country_probability >= @min_country_probability");
+            parameters["@min_country_probability"] = q.min_country_probability.Value;
         }
 
+        // Build WHERE clause
         var whereClause = conditions.Any()
             ? $"WHERE {string.Join(" AND ", conditions)}"
             : string.Empty;
 
-        // Valid sort columns
+        // Sorting
         var validSortColumns = new[] { "age", "created_at", "gender_probability" };
-        var sortBy = validSortColumns.Contains(q.SortBy?.ToLower())
-            ? q.SortBy!.ToLower()
+        var sortBy = validSortColumns.Contains(q.sort_by?.ToLower())
+            ? q.sort_by!.ToLower()
             : "created_at";
-        var order = q.Order.ToLower() == "desc" ? "DESC" : "ASC";
+        var order = q.order?.ToLower() == "desc" ? "DESC" : "ASC";
 
         // Pagination
-        var offset = (q.Page - 1) * q.Limit;
-        var limit = Math.Min(q.Limit, 50);
+        var offset = (q.page - 1) * q.limit;
+        var limit = Math.Min(q.limit, 50);
 
-        // Data query
+        // DATA QUERY - explicit column order matching Profile properties
         var sql = $@"
-            SELECT * FROM Profiles
+            SELECT id, name, gender, gender_probability, age, age_group, country_id, country_name, country_probability, created_at
+            FROM profiles
             {whereClause}
             ORDER BY {sortBy} {order}
             LIMIT {limit} OFFSET {offset}";
 
-        // Count query (separate, no LIMIT/OFFSET)
+        // COUNT QUERY
         var countSql = $@"
-            SELECT COUNT(*) FROM Profiles
+            SELECT COUNT(*) FROM profiles
             {whereClause}";
 
-        // Map sort_by values to actual column names
-        var sortColumn = q.SortBy?.ToLower() switch
-        {
-            "age" => "Age",
-            "gender_probability" => "GenderProbability",
-            "created_at" => "CreatedAt",
-            _ => "CreatedAt"
-        };
-
-        // Return 3 items: sql, parameters, countSql
         return (sql, parameters, countSql);
-
-        
     }
 }

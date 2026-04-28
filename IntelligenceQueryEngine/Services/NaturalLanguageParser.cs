@@ -11,39 +11,39 @@ public class NaturalLanguageParser
         var lower = query.ToLower();
 
         // Gender
-        if (Regex.IsMatch(lower, @"\b(males?|men|boys?)\b")) result.Gender = "male";
-        else if (Regex.IsMatch(lower, @"\b(females?|women|girls?)\b")) result.Gender = "female";
+        if (Regex.IsMatch(lower, @"\b(males?|men|boys?)\b")) result.gender = "male";
+        else if (Regex.IsMatch(lower, @"\b(females?|women|girls?)\b")) result.gender = "female";
 
         // Age group
-        if (Regex.IsMatch(lower, @"\badults?\b")) result.AgeGroup = "adult";
-        else if (Regex.IsMatch(lower, @"\b(teens?|teenagers?)\b")) result.AgeGroup = "teenager";
-        else if (Regex.IsMatch(lower, @"\b(children?|kids?)\b")) result.AgeGroup = "child";
-        else if (Regex.IsMatch(lower, @"\b(seniors?|elderly)\b")) result.AgeGroup = "senior";
+        if (Regex.IsMatch(lower, @"\badults?\b")) result.age_group = "adult";
+        else if (Regex.IsMatch(lower, @"\b(teens?|teenagers?)\b")) result.age_group = "teenager";
+        else if (Regex.IsMatch(lower, @"\b(children?|kids?)\b")) result.age_group = "child";
+        else if (Regex.IsMatch(lower, @"\b(seniors?|elderly)\b")) result.age_group = "senior";
 
         // Young (16-24)
-        if (Regex.IsMatch(lower, @"\byoung\b")) { result.MinAge = 16; result.MaxAge = 24; }
+        if (Regex.IsMatch(lower, @"\byoung\b")) { result.min_age = 16; result.max_age = 24; }
 
         // People from [country] - FIXED: use 'lower' not 'lowerQuery'
         var peopleFromMatch = Regex.Match(lower, @"people from\s+([a-z\s]+)");
         if (peopleFromMatch.Success)
         {
             var country = peopleFromMatch.Groups[1].Value.Trim();
-            result.CountryId = GetCountryCode(country);
+            result.country_id = GetCountryCode(country);
         }
 
         // Male and female teenagers above 17 - FIXED: use 'lower'
         if (Regex.IsMatch(lower, @"(male|female).*?(teenagers?)", RegexOptions.IgnoreCase))
         {
-            result.AgeGroup = "teenager";
+            result.age_group = "teenager";
             // Don't set gender for "male and female" - leave it null to include both
         }
 
         // Age comparisons
         var above = Regex.Match(lower, @"above\s+(\d+)|over\s+(\d+)");
-        if (above.Success) result.MinAge = int.Parse(above.Groups[1].Success ? above.Groups[1].Value : above.Groups[2].Value);
+        if (above.Success) result.min_age = int.Parse(above.Groups[1].Success ? above.Groups[1].Value : above.Groups[2].Value);
 
         var below = Regex.Match(lower, @"below\s+(\d+)|under\s+(\d+)");
-        if (below.Success) result.MaxAge = int.Parse(below.Groups[1].Success ? below.Groups[1].Value : below.Groups[2].Value);
+        if (below.Success) result.max_age = int.Parse(below.Groups[1].Success ? below.Groups[1].Value : below.Groups[2].Value);
 
         // Country mapping
         var countryMatch = Regex.Match(lower, @"from\s+([a-z\s]+)");
@@ -51,7 +51,7 @@ public class NaturalLanguageParser
         {
             var country = countryMatch.Groups[1].Value.Trim();
             var code = GetCountryCode(country);
-            if (code != null) result.CountryId = code;
+            if (code != null) result.country_id = code;
         }
 
         return result;
@@ -75,5 +75,5 @@ public class NaturalLanguageParser
     }
 
     public bool CanInterpret(QueryParams q) =>
-        q.Gender != null || q.AgeGroup != null || q.CountryId != null || q.MinAge.HasValue || q.MaxAge.HasValue;
+        q.gender != null || q.age_group != null || q.country_id != null || q.min_age.HasValue || q.max_age.HasValue;
 }

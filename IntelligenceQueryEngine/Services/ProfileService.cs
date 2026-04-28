@@ -14,7 +14,7 @@ public class ProfileService
 
     public async Task<(List<Profile> profiles, int total)> GetAsync(QueryParams q)
     {
-        // FIXED: Now expecting 3 items (sql, parameters, countSql)
+        // Build SQL query and parameters
         var (sql, parameters, countSql) = QueryBuilder.Build(q);
 
         var profiles = new List<Profile>();
@@ -23,33 +23,40 @@ public class ProfileService
         using var conn = new SqliteConnection(_connectionString);
         await conn.OpenAsync();
 
-        // Get total count using the separate countSql
+        // ==========================================
+        // Execute COUNT query
+        // ==========================================
         using var countCmd = new SqliteCommand(countSql, conn);
-        foreach (var p in parameters)
-            countCmd.Parameters.AddWithValue(p.Key, p.Value);
-
+        foreach (var param in parameters)
+        {
+            countCmd.Parameters.AddWithValue(param.Key, param.Value);
+        }
         total = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
 
-        // Get paginated data
+        // ==========================================
+        // Execute DATA query
+        // ==========================================
         using var cmd = new SqliteCommand(sql, conn);
-        foreach (var p in parameters)
-            cmd.Parameters.AddWithValue(p.Key, p.Value);
+        foreach (var param in parameters)
+        {
+            cmd.Parameters.AddWithValue(param.Key, param.Value);
+        }
 
         using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
             profiles.Add(new Profile
             {
-                Id = reader.GetString(0),
-                Name = reader.GetString(1),
-                Gender = reader.GetString(2),
+                id = reader.GetString(0),
+                name = reader.GetString(1),
+                gender = reader.GetString(2),
                 gender_probability = reader.GetDouble(3),
-                Age = reader.GetInt32(4),
+                age = reader.GetInt32(4),
                 age_group = reader.GetString(5),
                 country_id = reader.GetString(6),
-                CountryName = reader.GetString(7),
+                country_name = reader.GetString(7),
                 country_probability = reader.GetDouble(8),
-                CreatedAt = reader.GetDateTime(9)
+                created_at = reader.GetDateTime(9)
             });
         }
 
