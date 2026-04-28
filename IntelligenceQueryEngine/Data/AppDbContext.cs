@@ -14,8 +14,8 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Entity<Profile>(entity =>
         {
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.Name).IsUnique();
+            entity.HasKey(e => e.id);
+            entity.HasIndex(e => e.name).IsUnique();
         });
     }
 }

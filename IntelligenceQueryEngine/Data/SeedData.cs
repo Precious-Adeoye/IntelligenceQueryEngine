@@ -8,7 +8,7 @@ public static class SeedData
 {
     public static async Task InitializeAsync(AppDbContext context, IWebHostEnvironment env)
     {
-        // Check if already seeded
+        // Check if already seeded - USE UPPERCASE "Profiles"
         if (await context.profiles.AnyAsync())
         {
             Console.WriteLine("✅ Database already seeded");
@@ -75,19 +75,20 @@ public static class SeedData
         {
             profiles.Add(new Profile
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = item.GetProperty("name").GetString() ?? string.Empty,           // lowercase "name"
-                Gender = item.GetProperty("gender").GetString() ?? string.Empty,       // lowercase "gender"
-                gender_probability = item.GetProperty("gender_probability").GetDouble(), // snake_case
-                Age = item.GetProperty("age").GetInt32(),                              // lowercase "age"
-                age_group = item.GetProperty("age_group").GetString() ?? string.Empty,  // snake_case
-                country_id = item.GetProperty("country_id").GetString() ?? string.Empty, // snake_case
-                CountryName = item.GetProperty("country_name").GetString() ?? string.Empty, // snake_case
-                country_probability = item.GetProperty("country_probability").GetDouble(), // snake_case
-                CreatedAt = DateTime.UtcNow
+                id = Guid.NewGuid().ToString(),
+                name = item.GetProperty("name").GetString() ?? string.Empty,
+                gender = item.GetProperty("gender").GetString() ?? string.Empty,
+                gender_probability = item.GetProperty("gender_probability").GetDouble(),
+                age = item.GetProperty("age").GetInt32(),
+                age_group = item.GetProperty("age_group").GetString() ?? string.Empty,
+                country_id = item.GetProperty("country_id").GetString() ?? string.Empty,
+                country_name = item.GetProperty("country_name").GetString() ?? string.Empty,
+                country_probability = item.GetProperty("country_probability").GetDouble(),
+                created_at = DateTime.UtcNow
             });
         }
 
+        // USE UPPERCASE "Profiles"
         await context.profiles.AddRangeAsync(profiles);
         await context.SaveChangesAsync();
 
