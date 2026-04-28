@@ -1,9 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
 using IntelligenceQueryEngine.Models;
+using IntelligenceQueryEngine.Services.Contract;
 
 namespace IntelligenceQueryEngine.Services.Implementation;
 
-public class ProfileService
+public class ProfileService : IProfileService
 {
     private readonly string _connectionString;
 
@@ -12,10 +13,13 @@ public class ProfileService
         _connectionString = config.GetConnectionString("DefaultConnection") ?? "Data Source=profiles.db";
     }
 
-    public async Task<(List<Profile> profiles, int total)> GetAsync(QueryParams q)
+    public async Task<(List<Profile> profiles, int total)> GetProfilesAsync(QueryParams query)
     {
+        if (query == null)
+            query = new QueryParams();
+
         // Build SQL query and parameters
-        var (sql, parameters, countSql) = QueryBuilder.Build(q);
+        var (sql, parameters, countSql) = QueryBuilder.Build(query);
 
         var profiles = new List<Profile>();
         int total = 0;
