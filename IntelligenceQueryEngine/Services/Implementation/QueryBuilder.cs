@@ -1,6 +1,6 @@
 ﻿using IntelligenceQueryEngine.Models;
 
-namespace IntelligenceQueryEngine.Services;
+namespace IntelligenceQueryEngine.Services.Implementation;
 
 public static class QueryBuilder
 {

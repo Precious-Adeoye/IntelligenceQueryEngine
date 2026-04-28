@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using IntelligenceQueryEngine.Models;
 
-namespace IntelligenceQueryEngine.Services;
+namespace IntelligenceQueryEngine.Services.Implementation;
 
 public class ProfileService
 {
