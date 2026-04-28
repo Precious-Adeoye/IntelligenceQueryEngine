@@ -1,5 +1,7 @@
-﻿using IntelligenceQueryEngine.Model.Dto;
+﻿using IntelligenceQueryEngine.Helpers;
+using IntelligenceQueryEngine.Model.Dto;
 using IntelligenceQueryEngine.Models;
+using IntelligenceQueryEngine.Services.Contract;
 using IntelligenceQueryEngine.Services.Implementation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,10 @@ namespace IntelligenceQueryEngine.Controllers;
 [Route("api/[controller]")]
 public class ProfilesController : ControllerBase
 {
-    private readonly ProfileService _service;
+    private readonly IProfileService _service;
     private readonly NaturalLanguageParser _parser;
 
-    public ProfilesController(ProfileService service) { _service = service; _parser = new(); }
+    public ProfilesController(IProfileService service) { _service = service; _parser = new(); }
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
@@ -43,7 +45,7 @@ public class ProfilesController : ControllerBase
             limit = Math.Min(limit, 50)
         };
 
-        var (profiles, total) = await _service.GetAsync(query);
+        var (profiles, total) = await _service.GetProfilesAsync(query);
         return Ok(new ApiResponse<List<Profile>> { Status = "success", Page = page, Limit = limit, Total = total, Data = profiles });
     }
 
@@ -67,7 +69,7 @@ public class ProfilesController : ControllerBase
         query.page = page;
         query.limit = Math.Min(limit, 50);
 
-        var (profiles, total) = await _service.GetAsync(query);
+        var (profiles, total) = await _service.GetProfilesAsync(query);
         return Ok(new ApiResponse<List<Profile>> { Status = "success", Page = page, Limit = limit, Total = total, Data = profiles });
     }
 }
