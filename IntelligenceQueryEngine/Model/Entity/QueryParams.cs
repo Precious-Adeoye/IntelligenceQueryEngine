@@ -2,15 +2,15 @@
 
 public class QueryParams
 {
-    public string? Gender { get; set; }
-    public string? AgeGroup { get; set; }
-    public string? CountryId { get; set; }
-    public int? MinAge { get; set; }
-    public int? MaxAge { get; set; }
-    public double? MinGenderProbability { get; set; }
-    public double? MinCountryProbability { get; set; }
-    public string? SortBy { get; set; } = "created_at";
-    public string Order { get; set; } = "asc";
-    public int Page { get; set; } = 1;
-    public int Limit { get; set; } = 10;
+    public string? gender { get; set; }
+    public string? age_group { get; set; }
+    public string? country_id { get; set; }
+    public int? min_age { get; set; }
+    public int? max_age { get; set; }
+    public double? min_gender_probability { get; set; }
+    public double? min_country_probability { get; set; }
+    public string? sort_by { get; set; } = "created_at";
+    public string order { get; set; } = "asc";
+    public int page { get; set; } = 1;
+    public int limit { get; set; } = 10;
 }
