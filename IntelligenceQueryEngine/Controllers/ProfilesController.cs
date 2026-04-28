@@ -1,6 +1,6 @@
 ﻿using IntelligenceQueryEngine.Model.Dto;
 using IntelligenceQueryEngine.Models;
-using IntelligenceQueryEngine.Services;
+using IntelligenceQueryEngine.Services.Implementation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IntelligenceQueryEngine.Controllers;

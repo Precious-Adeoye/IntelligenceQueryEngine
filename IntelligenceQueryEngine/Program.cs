@@ -1,6 +1,6 @@
 using IntelligenceQueryEngine.Data;
 using IntelligenceQueryEngine.Middleware;
-using IntelligenceQueryEngine.Services;
+using IntelligenceQueryEngine.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
 
 namespace IntelligenceQueryEngine
