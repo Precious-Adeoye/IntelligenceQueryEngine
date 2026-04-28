@@ -29,7 +29,7 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Environment variables
-ENV ConnectionStrings__DefaultConnection="Data Source=/tmp/app.db"
+ENV ConnectionStrings__DefaultConnection="Data Source=profiles.db"
 ENV ASPNETCORE_ENVIRONMENT="Production"
 
 ENTRYPOINT ["dotnet", "IntelligenceQueryEngine.dll"]

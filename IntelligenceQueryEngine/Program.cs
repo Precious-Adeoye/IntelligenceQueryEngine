@@ -7,7 +7,7 @@ namespace IntelligenceQueryEngine
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,14 +30,14 @@ namespace IntelligenceQueryEngine
             builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
             // Writable temp folder
-            Directory.CreateDirectory("/tmp");
+            //Directory.CreateDirectory("/tmp");
 
             // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite("Data Source=/tmp/app.db"));
+                options.UseSqlite("Data Source=app.db"));
 
             // Health checks
-           // builder.Services.AddHealthChecks();
+           //builder.Services.AddHealthChecks();
 
             // App services
             builder.Services.AddScoped<ProfileService>();
@@ -68,22 +68,22 @@ namespace IntelligenceQueryEngine
             // Health route
             app.MapGet("/", () => "Running");
 
-            //app.MapHealthChecks("/health");
+           // app.MapHealthChecks("/health");
 
             app.MapControllers();
 
             // Create database only (non-blocking seed removed for deployment stability)
+            // Seed database
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                try
-                {
-                    dbContext.Database.EnsureCreated();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
+                var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+
+                // THIS IS CRITICAL - Creates the database and tables
+                await dbContext.Database.EnsureCreatedAsync();
+
+                // THEN seed the data
+                await SeedData.InitializeAsync(dbContext, env);
             }
 
             try
